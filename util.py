@@ -39,7 +39,6 @@ class StepQueryFusion(nn.Module):
         cond, _ = self.attn(q, F_mod, F_mod)   # (B*,1,d) → squeeze
         # print('cond',cond.shape)
         # print('feat',feat.shape)
-        # 不残差+feat,表现大概在0.57左右
         cond = cond.squeeze(1)+feat.squeeze(1)
         if return_intermediate:
             return cond, {
@@ -114,10 +113,6 @@ class GeMPool(nn.Module):
         return gem
         
 class RankReference(nn.Module):
-    """
-    GOL 风格 rank-loss（方向用 2-class CE，距离用三元组 margin）
-    R_k 会被一并更新；可通过 λ_ord / λ_met 调节强度
-    """
     def __init__(self, num_ranks: int = 4,
                  #cls+gap d_model=1536
                  #d = cat[768,768]， vit
@@ -211,10 +206,7 @@ class RankReference(nn.Module):
             }
         return L_ord, L_met
 class RankEmbed(nn.Module):
-    """
-    把整数等级 k (0..K-1) 映射成 d 维向量。
-    等价于一个可学习 embedding + 小 MLP（可选）。
-    """
+
     def __init__(self, num_ranks: int, d: int,mlp_hidden: int = None):
         super().__init__()
         self.table = nn.Embedding(num_ranks, d)
