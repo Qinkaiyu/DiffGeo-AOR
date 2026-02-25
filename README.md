@@ -2,9 +2,6 @@
 
 Diffusion-optimized autoregressive ordinal regression for medical image grading.
 
-![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB)
-![PyTorch](https://img.shields.io/badge/PyTorch-2.x-EE4C2C)
-![Task](https://img.shields.io/badge/Task-Ordinal%20Medical%20Grading-0A7E8C)
 
 ## For AOR-DR Users (Journal Extension)
 
