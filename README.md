@@ -1,4 +1,5 @@
 # DiffGeo-AOR
+## Diffusion-Optimized Medical Grading via Geometric Priors enhanced Autoregressive Ordinal Regression
 
 Diffusion-optimized autoregressive ordinal regression for medical image grading.
 
