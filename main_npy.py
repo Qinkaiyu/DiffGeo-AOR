@@ -25,7 +25,6 @@ import matplotlib.pyplot as plt
 import multiprocessing
 from diffloss import DiffLoss
 from timm.models.layers import trunc_normal_
-from pos_embed import interpolate_pos_embed
 import math
 from einops import rearrange, repeat
 import torchvision.models as models
@@ -45,26 +44,6 @@ from dataloader import ExcelDataset, RegressionDataset,GAMMA_dataset
 from util import task_importance_weights,SimpleFusion,RankEmbed,RankReference,GeMPool,TopKAttnPool,FiLMBlock,StepQueryFusion
 from build_model import prepare_model_resnet3d,prepare_model_vit,ViTFeatureExtractor,Resnet3dFeatureExtractor
 
-def prepare_model(chkpt_dir, arch='vit_large_patch16'):
-    # build model
-    model = models_vit.__dict__[arch](
-        img_size=224,
-        num_classes=5,
-        drop_path_rate=0,
-        global_pool=True,
-    )
-    # load model
-    print('-------------------------------vit-------------------------',model)
-    checkpoint = torch.load(chkpt_dir, map_location='cpu')
-    checkpoint_model = checkpoint['model']
-    interpolate_pos_embed(model, checkpoint_model)
-
-    msg = model.load_state_dict(checkpoint_model, strict=False)
-    assert set(msg.missing_keys) == {'head.weight', 'head.bias', 'fc_norm.weight', 'fc_norm.bias'}
-    trunc_normal_(model.head.weight, std=2e-5)
-
-    print('-------------------------------model-------------------------',msg)
-    return model
 def count_trainable_parameters(model):
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 def label_to_vector(labels, max_length=7):
