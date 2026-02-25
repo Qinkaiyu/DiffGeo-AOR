@@ -66,25 +66,8 @@ class Resnet3dFeatureExtractor(nn.Module):
         target = target.repeat(self.diffusion_batch_mul, 1)
         debug_info = {}
         if t == 0:
-            # x = self.vit_model.forward_features(image.float())
             x = self.vit_model(image.float())
-            # 这个pool 的方法不好
-            # gap = self.pool(x)
-            # print('gap',gap.shape)
-            # 这个pool 的方法好
-            # 这个是vit的            gap = x.mean(1)
-            # gap = x.mean(1)
-            # gap = x
-            # rank_feature = rank_feature.repeat(self.diffusion_batch_mul, 1)
-            # for vit_base_patch16_224
-            #cls+gap 能到60的f1 是目前最好的
             cls = x
-            # print('cls',cls.shape)
-            # print('gap',gap.shape)
-            # cls = x[:,0,:]
-            # gap = x[:,1:,:].mean(1)
-            # 这个是vit的
-            # rank_feature = torch.cat([cls, gap], dim=1)
             rank_feature = cls
             rank_feature = rank_feature.repeat(self.diffusion_batch_mul, 1)
             z = cls.repeat(self.diffusion_batch_mul, 1)
@@ -113,7 +96,6 @@ class Resnet3dFeatureExtractor(nn.Module):
                 debug_info["med_margin_scalar"] = float(rank_detail["margin_scalar"])
             else:
                 L_ord, L_met = self.rank.order_metric_gol(rank_feature, real_target)
-            # loss = loss
             loss = loss + self.lambda_o *L_ord + self.lambda_m * L_met
             fusion_feature = z
             debug_info["step0_fusion_feature"] = fusion_feature.detach()
@@ -131,25 +113,16 @@ class Resnet3dFeatureExtractor(nn.Module):
             else:
                 fusion_feature = self.query_builder(image,p,t)
             
-            
-            # fusion_feature  = self.SimpleFusion(image,p,t)
-            # fusion_feature_detached = fusion_feature.detach()
+
             loss, probas = self.diffloss(z=fusion_feature, target=target)
             real_target = real_target.repeat(self.diffusion_batch_mul)
-            # L_ord, L_met = self.rank.order_metric_gol(fusion_feature, real_target)
-            # loss = loss + self.lambda_o * L_ord + self.lambda_m * L_met
         if return_debug:
             debug_info["step"] = int(t)
             return loss, probas, fusion_feature, debug_info
         return loss, probas,fusion_feature
     def sample(self, image, t, temperature=1.0, cfg=1.0, sampler="ddim", eta=0.0):
         if t == 0:
-            # x = self.vit_model.forward_features(image.float())
             x = self.vit_model(image.float())
-            # for vit_base_patch16_224
-            # x = x[:,0,:]
-            # print('x',x.shape)
-            # x.requires_grad = True
         else:
             x = image
         sampled_token_latent = self.diffloss.sample(
@@ -187,7 +160,6 @@ class ViTFeatureExtractor(nn.Module):
         self.rank = RankReference(num_ranks=5,d_model=1536)
         self.lambda_o = 0.2
         self.lambda_m = 0.2
-        # self.pool = TopKAttnPool(k=round(0.1 * 196))   # 10% patch
         self.pool = GeMPool(p_init=2.5)
         self.query_builder = StepQueryFusion(d_feat=768, d_model=768, num_steps=4)
     def forward(self, image,p,target,t,real_target, return_debug: bool = False):
@@ -196,30 +168,12 @@ class ViTFeatureExtractor(nn.Module):
         debug_info = {}
         if t == 0:
             x = self.vit_model.forward_features(image.float())
-            # x = self.vit_model(image.float())
-            # 这个pool 的方法不好
-            # gap = self.pool(x)
-            # print('gap',gap.shape)
-            # 这个pool 的方法好
-            # 这个是vit的            gap = x.mean(1)
-            # gap = x.mean(1)
-            # gap = x
-            # rank_feature = rank_feature.repeat(self.diffusion_batch_mul, 1)
-            # for vit_base_patch16_224
-            #cls+gap 能到60的f1 是目前最好的
-            # cls = x
-            # print('cls',cls.shape)
-            # print('gap',gap.shape)
-            # print('x',x.shape)
-            # breakpoint()
             cls = x[:,0,:]
             gap = x[:,1:,:].mean(1)
             # 这个是vit的
             rank_feature = torch.cat([cls, gap], dim=1)
-            # rank_feature = cls
             rank_feature = rank_feature.repeat(self.diffusion_batch_mul, 1)
             z = cls.repeat(self.diffusion_batch_mul, 1)
-            # z_detached = z.detach()
             loss, probas = self.diffloss(z=z, target=target)
 
             real_target = real_target.repeat(self.diffusion_batch_mul)
@@ -261,13 +215,8 @@ class ViTFeatureExtractor(nn.Module):
             else:
                 fusion_feature = self.query_builder(image,p,t)
             
-            
-            # fusion_feature  = self.SimpleFusion(image,p,t)
-            # fusion_feature_detached = fusion_feature.detach()
             loss, probas = self.diffloss(z=fusion_feature, target=target)
             real_target = real_target.repeat(self.diffusion_batch_mul)
-            # L_ord, L_met = self.rank.order_metric_gol(fusion_feature, real_target)
-            # loss = loss + self.lambda_o * L_ord + self.lambda_m * L_met
         if return_debug:
             debug_info["step"] = int(t)
             return loss, probas, fusion_feature, debug_info
@@ -275,10 +224,7 @@ class ViTFeatureExtractor(nn.Module):
     def sample(self, image, t, temperature=1.0, cfg=1.0, sampler="ddim", eta=0.0):
         if t == 0:
             x = self.vit_model.forward_features(image.float())
-            # for vit_base_patch16_224
             x = x[:,0,:]
-            # print('x',x.shape)
-            # x.requires_grad = True
         else:
             x = image
         sampled_token_latent = self.diffloss.sample(
