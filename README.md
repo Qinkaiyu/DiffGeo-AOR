@@ -2,9 +2,6 @@
 
 Diffusion-optimized autoregressive ordinal regression for medical image grading.
 
-
-## For AOR-DR Users (Journal Extension)
-
 This repository is the **journal extension** of [AOR-DR](https://github.com/Qinkaiyu/AOR-DR), where AOR-DR corresponds to the MICCAI 2025 conference version.
 
 - `AOR-DR`: MICCAI 2025 conference version.
