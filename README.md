@@ -85,11 +85,5 @@ python test_npy.py
 ```
 ## Checkpoint
 
-[link](https://drive.google.com/drive/folders/1cIexxsZroKMJRVhyebzJ7w54QTnWAsvO?usp=sharing)
-
-`test_npy_main2.py` uses a user-config block in-file (dataset, split, checkpoint, benchmark mode).  
-Edit that block before running for your experiment.
-## Checkpoint
-
 [link](https://drive.google.com/drive/folders/1AFiUMh3WB53XOMwYVm-2_6ooOcram77l?usp=sharing)
 
