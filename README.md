@@ -9,7 +9,9 @@ This repository is the **journal extension** of [AOR-DR](https://github.com/Qink
 - If you are already familiar with AOR-DR, you can directly use this repository for extension experiments.
 
 ## Overview
-
+<p align="center">
+  <img src="./TMI_RANK.png" alt="DiffGeo-AOR method overview from TMI_RANK.pdf" width="95%">
+</p>
 
 ## Using This After AOR-DR (Quick)
 
