@@ -451,7 +451,7 @@ def main():
         "eyeq": {
             "num_classes": 3,
             "backbone": "vit2d",
-            "checkpoint": "./vit-b_position_eyeq.pth",
+            "checkpoint": "./pth",
             "expects_3d": False,
             "splits": {
                 "train": {
@@ -469,7 +469,7 @@ def main():
         "ddr": {
             "num_classes": 5,
             "backbone": "vit2d",
-            "checkpoint": "./vit-b_ddr_position.pth",
+            "checkpoint": "./pth",
             "expects_3d": False,
             "splits": {
                 "train": {
@@ -487,7 +487,7 @@ def main():
         "amd": {
             "num_classes": 4,
             "backbone": "resnet3d",
-            "checkpoint": "./vit-b_OCT_amd.pth",
+            "checkpoint": "./pth",
             "expects_3d": True,
             "gamma_test_ids_csv": r"/path/amd.csv",
             "splits": {
