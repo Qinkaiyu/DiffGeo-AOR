@@ -86,5 +86,5 @@ python test_npy.py
 ```
 ## Checkpoint
 
-[link](https://drive.google.com/file/d/1yKgiApbu4QKD-eI64hM_ZDlr9sIS1JX1/view?usp=sharing)
+[link](https://drive.google.com/drive/folders/1cIexxsZroKMJRVhyebzJ7w54QTnWAsvO?usp=drive_link)
 
